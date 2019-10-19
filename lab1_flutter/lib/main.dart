@@ -1,85 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lab1_flutter/passanger.dart';
+import 'package:lab1_flutter/passanger_widget.dart';
+import 'package:lab1_flutter/provider/crud_notifier.dart';
 import 'package:lab1_flutter/repository.dart';
-
+import 'package:provider/provider.dart';
+import 'commons/displayDialog.dart';
 import 'controller.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  Repository repository = new Repository();
+  Controller controller = new Controller(repository: repository);
+  runApp(
+    ChangeNotifierProvider(
+      builder: (context) =>
+          CrudNotifier(controller: controller, repository: repository),
+      child: MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Repository repository = new Repository();
-    Controller controller = new Controller(repository: repository);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(
-        title: 'Flutter Demo Home Page',
-        controller: controller,
-      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   final String title;
-  final Controller controller;
 
-  const MyHomePage({this.title, this.controller, Key key}) : super(key: key);
+  const MyHomePage({this.title, Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Passanger> passangers;
-  TextEditingController _textFieldController = TextEditingController();
   int biggestId = 0;
+  final TextEditingController _textFieldController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    updateUi();
-  }
-
-  void addPassanger() {
-    widget.controller.add(Passanger(name: _textFieldController.value.text));
-    Navigator.of(context).pop();
-    updateUi();
-  }
-
-  void deletePassanger(Passanger passanger) {
-    widget.controller.delete(passanger);
-    updateUi();
-  }
-
-  void updatePassanger(Passanger passanger) {
-    _displayDialog(context,
-        title: "Update a passanger",
-        buttonText: "Update",
-        onPress: addPassanger);
-    Passanger passangerUpdated =
-        Passanger(id: passanger.id, name: _textFieldController.value.text);
-    widget.controller.update(passangerUpdated);
-    Navigator.of(context).pop();
-    updateUi();
-  }
-
-  updateUi() {
-    setState(() {
-      passangers = widget.controller.getAll();
-    });
+  void addPassanger(BuildContext context, Map<String, String> inputData) {
+    final provider = Provider.of<CrudNotifier>(context, listen: true);
+    provider.add(Passanger(name: inputData["name"]));
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> passangerWidgets =
-        passangers.map((f) => passangerWidget(f)).toList();
-
+    final provider = Provider.of<CrudNotifier>(context, listen: true);
+    List<Passanger> passangers = provider.getPassangers;
+    List<Widget> passangerWidgets = passangers
+        .map((f) => PassangerWidget(
+              key: Key(f.id.toString()),
+              passanger: f,
+            ))
+        .toList();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -89,72 +69,13 @@ class _MyHomePageState extends State<MyHomePage> {
         children: passangerWidgets,
       )),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.black,
-        onPressed: () => _displayDialog(context,
-            title: "Add a passanger", buttonText: "ADD", onPress: addPassanger),
-      ),
+          child: Icon(Icons.add),
+          backgroundColor: Colors.black,
+          onPressed: () async {
+            Map<String, String> inputData = await displayDialog(
+                context: context, title: "Add a passanger", buttonText: "ADD");
+            addPassanger(context, inputData);
+          }),
     );
-  }
-
-  Widget passangerWidget(Passanger passanger) {
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
-      child: Container(
-        color: Colors.white,
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colors.indigoAccent,
-            child: Text(passanger.id.toString()),
-            foregroundColor: Colors.white,
-          ),
-          title: Text(passanger.name),
-        ),
-      ),
-      actions: <Widget>[
-        IconSlideAction(
-          caption: 'Update',
-          color: Colors.blue,
-          icon: Icons.update,
-          onTap: () => updatePassanger(passanger),
-        ),
-      ],
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: () => deletePassanger(passanger),
-        ),
-      ],
-    );
-  }
-
-  _displayDialog(BuildContext context,
-      {String title, String buttonText, Function onPress}) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: TextField(
-              controller: _textFieldController,
-              decoration: InputDecoration(hintText: 'Name'),
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(buttonText),
-                onPressed: onPress,
-              ),
-              new FlatButton(
-                child: new Text('CANCEL'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
   }
 }

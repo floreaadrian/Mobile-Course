@@ -14,8 +14,8 @@ class Controller {
     repository.delete(passanger.id);
   }
 
-  void update(Passanger passanger) {
-    repository.update(passanger);
+  void update(Passanger oldPasanger, Passanger passanger) {
+    repository.update(oldPasanger, passanger);
   }
 
   List<Passanger> getAll() {
