@@ -8,14 +8,8 @@ import 'commons/displayDialog.dart';
 
 class PassangerWidget extends StatelessWidget {
   final Passanger passanger;
-  final TextEditingController _textFieldController = TextEditingController();
 
   PassangerWidget({Key key, this.passanger}) : super(key: key);
-
-  void addPassanger(BuildContext context) {
-    final provider = Provider.of<CrudNotifier>(context, listen: true);
-    provider.add(Passanger(name: _textFieldController.value.text));
-  }
 
   void deletePassanger(BuildContext context, Passanger passanger) {
     final provider = Provider.of<CrudNotifier>(context, listen: true);
@@ -28,8 +22,8 @@ class PassangerWidget extends StatelessWidget {
       title: "Update a passanger",
       buttonText: "Update",
     );
-    Passanger passangerUpdated =
-        Passanger(id: passanger.id, name: inputData["name"]);
+    if (inputData == null) return;
+    Passanger passangerUpdated = Passanger.fromJson(inputData);
     final provider = Provider.of<CrudNotifier>(context, listen: true);
     provider.update(passanger, passangerUpdated);
   }
@@ -41,14 +35,7 @@ class PassangerWidget extends StatelessWidget {
       actionExtentRatio: 0.25,
       child: Container(
         color: Colors.white,
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colors.indigoAccent,
-            child: Text(passanger.id.toString()),
-            foregroundColor: Colors.white,
-          ),
-          title: Text(passanger.name),
-        ),
+        child: PassangerDetails(passanger: passanger),
       ),
       actions: <Widget>[
         IconSlideAction(
@@ -66,6 +53,53 @@ class PassangerWidget extends StatelessWidget {
           onTap: () => deletePassanger(context, passanger),
         ),
       ],
+    );
+  }
+}
+
+class PassangerDetails extends StatelessWidget {
+  final Passanger passanger;
+  const PassangerDetails({Key key, @required this.passanger}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ExpansionTile(
+        title: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.indigoAccent,
+            child: Text(passanger.id.toString()),
+            foregroundColor: Colors.white,
+          ),
+          title: Text(passanger.name),
+        ),
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[Text("Email: "), Text(passanger.email)],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text("Airplane Name: "),
+                    Text(passanger.airplaneName)
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text("Seat Position: "),
+                    Text(passanger.seatPosition)
+                  ],
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

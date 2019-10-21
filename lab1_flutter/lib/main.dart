@@ -43,11 +43,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int biggestId = 0;
-  final TextEditingController _textFieldController = TextEditingController();
 
   void addPassanger(BuildContext context, Map<String, String> inputData) {
     final provider = Provider.of<CrudNotifier>(context, listen: true);
-    provider.add(Passanger(name: inputData["name"]));
+    if (inputData == null) return;
+    provider.add(Passanger.fromJson(inputData));
   }
 
   @override
