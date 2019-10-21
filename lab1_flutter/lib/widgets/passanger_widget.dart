@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lab1_flutter/commons/displayDialog.dart';
 import 'package:lab1_flutter/passanger.dart';
 import 'package:lab1_flutter/provider/crud_notifier.dart';
 import 'package:provider/provider.dart';
-
-import 'commons/displayDialog.dart';
 
 class PassangerWidget extends StatelessWidget {
   final Passanger passanger;
@@ -34,7 +33,6 @@ class PassangerWidget extends StatelessWidget {
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       child: Container(
-        color: Colors.white,
         child: PassangerDetails(passanger: passanger),
       ),
       actions: <Widget>[
@@ -67,9 +65,7 @@ class PassangerDetails extends StatelessWidget {
       child: ExpansionTile(
         title: ListTile(
           leading: CircleAvatar(
-            backgroundColor: Colors.indigoAccent,
             child: Text(passanger.id.toString()),
-            foregroundColor: Colors.white,
           ),
           title: Text(passanger.name),
         ),
