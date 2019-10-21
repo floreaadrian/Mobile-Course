@@ -54,7 +54,6 @@ Future<Map<String, String>> displayDialog(
             new FlatButton(
               child: new Text(buttonText),
               onPressed: () {
-                print(inputData);
                 Navigator.of(context).pop(inputData);
               },
             ),

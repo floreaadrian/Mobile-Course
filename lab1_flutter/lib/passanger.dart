@@ -16,7 +16,7 @@ class Passanger extends Equatable {
   Passanger.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         email = json['email'],
-        id = json['id'],
+        id = int.parse(json['id']) ?? -1,
         airplaneName = json['airplaneName'],
         seatPosition = json['seatPosition'];
 

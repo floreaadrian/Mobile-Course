@@ -22,7 +22,9 @@ class PassangerWidget extends StatelessWidget {
       buttonText: "Update",
     );
     if (inputData == null) return;
+    inputData['id'] = passanger.id.toString();
     Passanger passangerUpdated = Passanger.fromJson(inputData);
+    print(passangerUpdated.toJson());
     final provider = Provider.of<CrudNotifier>(context, listen: true);
     provider.update(passanger, passangerUpdated);
   }

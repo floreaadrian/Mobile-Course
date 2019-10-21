@@ -16,7 +16,7 @@ class Repository {
   }
 
   void add(Passanger passanger) {
-    if (passanger.id == null)
+    if (passanger.id == null || passanger.id == -1)
       passanger = Passanger(
           id: biggestId + 1,
           name: passanger.name,
