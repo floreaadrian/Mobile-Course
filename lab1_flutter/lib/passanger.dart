@@ -14,11 +14,11 @@ class Passanger extends Equatable {
   List<Object> get props => [id, name];
 
   Passanger.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        email = json['email'],
-        id = int.parse(json['id']) ?? -1,
-        airplaneName = json['airplaneName'],
-        seatPosition = json['seatPosition'];
+      : name = json['name'] ?? '',
+        email = json['email'] ?? '',
+        id = int.parse(json['id'] ?? '-1') ?? -1,
+        airplaneName = json['airplaneName'] ?? '',
+        seatPosition = json['seatPosition'] ?? '';
 
   Map<String, dynamic> toJson() => {
         'id': id,

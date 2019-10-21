@@ -53,9 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Container(
+        child: SingleChildScrollView(
           child: Column(
-        children: passangerWidgets,
-      )),
+            children: passangerWidgets,
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           // backgroundColor: Colors.black,
