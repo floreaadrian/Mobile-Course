@@ -18,7 +18,7 @@ class Controller {
     repository.update(oldPasanger, passanger);
   }
 
-  List<Passanger> getAll() {
-    return repository.getAll;
+  Future<List<Passanger>> getAll() async {
+    return repository.getAll();
   }
 }

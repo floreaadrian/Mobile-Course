@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-Future<Map<String, String>> displayDialog(
+Future<Map<String, dynamic>> displayDialog(
     {BuildContext context, String title, String buttonText}) async {
-  Map<String, String> inputData = {
+  Map<String, dynamic> inputData = {
     "name": "",
     "airplaneName": "",
     "seatPosition": "",
     "email": ""
   };
-  return showDialog<Map<String, String>>(
+  return showDialog<Map<String, dynamic>>(
       context: context,
       barrierDismissible:
           false, // dialog is dismissible with a tap on the barrier

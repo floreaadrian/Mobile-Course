@@ -16,15 +16,14 @@ class PassangerWidget extends StatelessWidget {
   }
 
   void updatePassanger(BuildContext context, Passanger passanger) async {
-    Map<String, String> inputData = await displayDialog(
+    Map<String, dynamic> inputData = await displayDialog(
       context: context,
       title: "Update a passanger",
       buttonText: "Update",
     );
     if (inputData == null) return;
-    inputData['id'] = passanger.id.toString();
+    inputData['id'] = passanger.id;
     Passanger passangerUpdated = Passanger.fromJson(inputData);
-    print(passangerUpdated.toJson());
     final provider = Provider.of<CrudNotifier>(context, listen: true);
     provider.update(passanger, passangerUpdated);
   }

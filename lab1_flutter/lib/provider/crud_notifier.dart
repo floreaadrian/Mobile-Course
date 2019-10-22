@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +13,12 @@ class CrudNotifier extends ChangeNotifier {
 
   CrudNotifier({@required this.repository, @required this.controller});
 
-  List<Passanger> get getPassangers => controller.getAll();
+  Future<List<Passanger>> getPassangers() async {
+    List<Passanger> passangers = await controller.getAll();
+    // await Future.delayed(const Duration(seconds: 2), () {});
+    return passangers;
+  }
+
   void update(Passanger oldPasanger, Passanger passanger) {
     controller.update(oldPasanger, passanger);
     notifyListeners();

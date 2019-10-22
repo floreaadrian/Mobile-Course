@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lab1_flutter/passanger.dart';
+import 'package:lab1_flutter/in_memory_repository.dart';
 import 'package:lab1_flutter/provider/crud_notifier.dart';
 import 'package:lab1_flutter/provider/theme_notifier.dart';
 import 'package:lab1_flutter/repository.dart';
 import 'package:lab1_flutter/screens/home_screen.dart';
 import 'package:lab1_flutter/themes.dart';
 import 'package:provider/provider.dart';
-import 'commons/displayDialog.dart';
 import 'controller.dart';
+import 'database_creator.dart';
+import 'local_db_repository.dart';
 
-void main() {
-  Repository repository = new Repository();
+void main() async {
+  await DatabaseCreator().initDatabase();
+  Repository repository = new LocalDbRepository();
   Controller controller = new Controller(repository: repository);
   runApp(MultiProvider(
     providers: [

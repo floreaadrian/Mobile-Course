@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lab1_flutter/commons/displayDialog.dart';
 import 'package:lab1_flutter/provider/crud_notifier.dart';
 import 'package:lab1_flutter/provider/theme_notifier.dart';
-import 'package:lab1_flutter/themes.dart';
 import 'package:lab1_flutter/widgets/passanger_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -29,17 +28,33 @@ class _MyHomePageState extends State<MyHomePage> {
     provider.add(Passanger.fromJson(inputData));
   }
 
+  Widget passangersWidget() {
+    final provider = Provider.of<CrudNotifier>(context, listen: true);
+    return FutureBuilder(
+        future: provider.getPassangers(),
+        builder: (context, passangersSnap) {
+          if (passangersSnap.connectionState == ConnectionState.done) {
+            if (passangersSnap.data == null) return Container();
+            return ListView.builder(
+              itemCount: passangersSnap.data.length,
+              itemBuilder: (context, index) {
+                return PassangerWidget(
+                  key: Key(passangersSnap.data[index].id.toString()),
+                  passanger: passangersSnap.data[index],
+                );
+              },
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CrudNotifier>(context, listen: true);
     final themeProvider = Provider.of<ThemeNotifier>(context, listen: true);
-    List<Passanger> passangers = provider.getPassangers;
-    List<Widget> passangerWidgets = passangers
-        .map((f) => PassangerWidget(
-              key: Key(f.id.toString()),
-              passanger: f,
-            ))
-        .toList();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -52,13 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: passangerWidgets,
-          ),
-        ),
-      ),
+      body: Container(child: passangersWidget()),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           // backgroundColor: Colors.black,
