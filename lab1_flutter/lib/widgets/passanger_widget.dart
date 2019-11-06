@@ -20,6 +20,7 @@ class PassangerWidget extends StatelessWidget {
       context: context,
       title: "Update a passanger",
       buttonText: "Update",
+      passanger: passanger,
     );
     if (inputData == null) return;
     inputData['id'] = passanger.id;

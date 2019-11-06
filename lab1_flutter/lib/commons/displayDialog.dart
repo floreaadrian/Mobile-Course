@@ -1,13 +1,28 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-Future<Map<String, dynamic>> displayDialog(
-    {BuildContext context, String title, String buttonText}) async {
-  Map<String, dynamic> inputData = {
-    "name": "",
-    "airplaneName": "",
-    "seatPosition": "",
-    "email": ""
-  };
+import 'package:flutter/material.dart';
+import 'package:lab1_flutter/passanger.dart';
+
+Future<Map<String, dynamic>> displayDialog({
+  BuildContext context,
+  String title,
+  String buttonText,
+  Passanger passanger,
+}) async {
+  final _textKey = GlobalKey<FormState>();
+  TextEditingController _nameController = TextEditingController(
+    text: passanger != null ? passanger.name : "",
+  );
+  TextEditingController _emailController = TextEditingController(
+    text: passanger != null ? passanger.email : "",
+  );
+  TextEditingController _airplaneController = TextEditingController(
+    text: passanger != null ? passanger.airplaneName : "",
+  );
+  TextEditingController _seatController = TextEditingController(
+    text: passanger != null ? passanger.seatPosition : "",
+  );
+
   return showDialog<Map<String, dynamic>>(
       context: context,
       barrierDismissible:
@@ -15,45 +30,55 @@ Future<Map<String, dynamic>> displayDialog(
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: new Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                child: TextField(
-                  autofocus: true,
-                  decoration: new InputDecoration(labelText: 'Name'),
-                  onChanged: (value) {
-                    inputData["name"] = value;
-                  },
-                ),
+          content: Form(
+            key: _textKey,
+            child: SingleChildScrollView(
+              child: new Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    child: TextFormField(
+                        autofocus: true,
+                        controller: _nameController,
+                        decoration: new InputDecoration(labelText: 'Name'),
+                        textInputAction: Platform.isAndroid
+                            ? TextInputAction.next
+                            : TextInputAction.continueAction),
+                  ),
+                  TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: new InputDecoration(
+                          labelText: 'Email', hintText: "email@email.email"),
+                      controller: _emailController,
+                      textInputAction: Platform.isAndroid
+                          ? TextInputAction.next
+                          : TextInputAction.continueAction),
+                  TextFormField(
+                      decoration: new InputDecoration(
+                          labelText: 'Airplane Name', hintText: "CljBuc"),
+                      controller: _airplaneController,
+                      textInputAction: Platform.isAndroid
+                          ? TextInputAction.next
+                          : TextInputAction.continueAction),
+                  TextFormField(
+                    decoration: new InputDecoration(
+                        labelText: 'Seat Position', hintText: "C3"),
+                    controller: _seatController,
+                  ),
+                ],
               ),
-              TextField(
-                decoration: new InputDecoration(
-                    labelText: 'Email', hintText: "email@email.email"),
-                onChanged: (value) {
-                  inputData["email"] = value;
-                },
-              ),
-              TextField(
-                decoration: new InputDecoration(
-                    labelText: 'Airplane Name', hintText: "CljBuc"),
-                onChanged: (value) {
-                  inputData["airplaneName"] = value;
-                },
-              ),
-              TextField(
-                decoration: new InputDecoration(
-                    labelText: 'Seat Position', hintText: "C3"),
-                onChanged: (value) {
-                  inputData["seatPosition"] = value;
-                },
-              ),
-            ],
+            ),
           ),
           actions: <Widget>[
             new FlatButton(
               child: new Text(buttonText),
               onPressed: () {
+                Map<String, dynamic> inputData = {
+                  "name": _nameController.text,
+                  "airplaneName": _airplaneController.text,
+                  "seatPosition": _seatController.text,
+                  "email": _emailController.text
+                };
                 Navigator.of(context).pop(inputData);
               },
             ),

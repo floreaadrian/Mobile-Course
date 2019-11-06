@@ -34,8 +34,8 @@ class InMemoryRepository implements Repository {
   @override
   Future<void> update(Passanger oldPassanger, Passanger passanger) async {
     int poisition = passangers.lastIndexOf(oldPassanger);
-    delete(passanger.id);
-    addAtPosition(passanger, poisition);
+    await delete(passanger.id);
+    await addAtPosition(passanger, poisition);
   }
 
   Future<void> addAtPosition(Passanger passanger, int position) async {

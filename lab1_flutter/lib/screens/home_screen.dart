@@ -22,7 +22,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int biggestId = 0;
 
-  void addPassanger(BuildContext context, Map<String, String> inputData) {
+  void addPassanger(BuildContext context, Map<String, dynamic> inputData) {
     final provider = Provider.of<CrudNotifier>(context, listen: true);
     if (inputData == null) return;
     provider.add(Passanger.fromJson(inputData));
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Icon(Icons.add),
           // backgroundColor: Colors.black,
           onPressed: () async {
-            Map<String, String> inputData = await displayDialog(
+            Map<String, dynamic> inputData = await displayDialog(
                 context: context, title: "Add a passanger", buttonText: "ADD");
             addPassanger(context, inputData);
           }),

@@ -11,8 +11,9 @@ import 'database_creator.dart';
 import 'local_db_repository.dart';
 
 void main() async {
-  await DatabaseCreator().initDatabase();
-  Repository repository = new LocalDbRepository();
+//  await DatabaseCreator().initDatabase();
+  // Repository repository = new LocalDbRepository();
+  Repository repository = new InMemoryRepository();
   Controller controller = new Controller(repository: repository);
   runApp(MultiProvider(
     providers: [
