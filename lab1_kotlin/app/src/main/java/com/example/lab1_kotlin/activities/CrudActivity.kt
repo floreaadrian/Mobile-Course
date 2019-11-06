@@ -91,11 +91,11 @@ class CrudActivity : AppCompatActivity() {
         }
         if (airplaneEt.text.toString().trim().isEmpty()) {
             ok = false
-            errors.add("year of fabrication, ")
+            errors.add("airplane name, ")
         }
         if (seatPositionEt.text.toString().trim().isEmpty()) {
             ok = false
-            errors.add("total cost estimation, ")
+            errors.add("sear position, ")
         }
         return ok
     }
