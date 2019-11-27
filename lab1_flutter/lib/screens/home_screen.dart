@@ -25,6 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void addPassanger(BuildContext context, Map<String, dynamic> inputData) {
     final provider = Provider.of<CrudNotifier>(context, listen: true);
     if (inputData == null) return;
+    if (inputData["name"] == '' && inputData["email"] == '') return;
     provider.add(Passanger.fromJson(inputData));
   }
 
