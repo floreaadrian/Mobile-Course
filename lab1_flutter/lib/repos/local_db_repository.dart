@@ -21,14 +21,16 @@ class LocalDbRepository implements Repository {
       ${DatabaseCreator.name},
       ${DatabaseCreator.seatPosition},
       ${DatabaseCreator.airplaneName},
-      ${DatabaseCreator.email}
+      ${DatabaseCreator.email},
+      ${DatabaseCreator.serverId}
     )
     VALUES
     (
       "${passanger.name}",
       "${passanger.seatPosition}",
       "${passanger.airplaneName}",
-      "${passanger.email}"
+      "${passanger.email}",
+      "${passanger.serverId}"
     )
     ''';
     final result = await db.rawInsert(sql);
@@ -36,7 +38,7 @@ class LocalDbRepository implements Repository {
   }
 
   @override
-  Future<void> delete(Passanger passanger) async {
+  Future<void> deletePassanger(Passanger passanger) async {
     final sql = ''' DELETE FROM ${DatabaseCreator.passangerTable}
       WHERE ${DatabaseCreator.id} == ${passanger.id}
     ''';
@@ -44,17 +46,17 @@ class LocalDbRepository implements Repository {
     DatabaseCreator.databaseLog('Delete passanger', sql, null, result);
   }
 
-  @override
-  Future<Passanger> findById(int id) async {
-    final sql = '''SELECT * FROM ${DatabaseCreator.passangerTable}
-      WHERE ${DatabaseCreator.id} == $id
-    ''';
-    final result = await db.rawQuery(sql);
-    Passanger passanger = Passanger.fromJson(result[0].values.elementAt(0));
+  // @override
+  // Future<Passanger> findById(int id) async {
+  //   final sql = '''SELECT * FROM ${DatabaseCreator.passangerTable}
+  //     WHERE ${DatabaseCreator.id} == $id
+  //   ''';
+  //   final result = await db.rawQuery(sql);
+  //   Passanger passanger = Passanger.fromJson(result[0].values.elementAt(0));
 
-    DatabaseCreator.databaseLog('Find by id', sql, result, null);
-    return passanger;
-  }
+  //   DatabaseCreator.databaseLog('Find by id', sql, result, null);
+  //   return passanger;
+  // }
 
   @override
   Future<void> update(Passanger oldPassanger, Passanger passanger) async {
@@ -62,7 +64,8 @@ class LocalDbRepository implements Repository {
     SET ${DatabaseCreator.airplaneName} = "${passanger.airplaneName}",
         ${DatabaseCreator.email} = "${passanger.email}",
         ${DatabaseCreator.name} = "${passanger.name}",
-        ${DatabaseCreator.seatPosition} = "${passanger.seatPosition}"
+        ${DatabaseCreator.seatPosition} = "${passanger.seatPosition}",
+        ${DatabaseCreator.serverId} = "${passanger.serverId}"
     WHERE ${DatabaseCreator.id} == ${oldPassanger.id}
     ''';
     final result = await db.rawUpdate(sql);

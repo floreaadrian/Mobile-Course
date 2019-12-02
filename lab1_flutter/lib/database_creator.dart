@@ -10,6 +10,7 @@ class DatabaseCreator {
   static const passangerTable = 'passanger';
   static const id = 'id';
   static const String name = 'name';
+  static const String serverId = '_id';
   static const String airplaneName = 'airplaneName';
   static const String seatPosition = 'seatPosition';
   static const String email = 'email';
@@ -33,7 +34,8 @@ class DatabaseCreator {
         $name VARCHAR(60),
         $airplaneName VARCHAR(60),
         $seatPosition VARCHAR(60),
-        $email VARCHAR(60)
+        $email VARCHAR(60),
+        $serverId VARCHAR(60)
     )''';
     await db.execute(passangerSql);
   }

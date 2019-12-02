@@ -30,8 +30,17 @@ class PassangerWidget extends StatelessWidget {
     provider.update(passanger, passangerUpdated);
   }
 
+  void showDefaultSnackbar(BuildContext context) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text('No internet connection'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<CrudNotifier>(context, listen: true);
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
@@ -41,17 +50,29 @@ class PassangerWidget extends StatelessWidget {
       actions: <Widget>[
         IconSlideAction(
           caption: 'Update',
-          color: Colors.blue,
+          color: provider.isOnline ? Colors.blue : Colors.grey,
           icon: Icons.update,
-          onTap: () => updatePassanger(context, passanger),
+          onTap: () {
+            if (provider.isOnline) {
+              updatePassanger(context, passanger);
+            } else {
+              showDefaultSnackbar(context);
+            }
+          },
         ),
       ],
       secondaryActions: <Widget>[
         IconSlideAction(
           caption: 'Delete',
-          color: Colors.red,
+          color: provider.isOnline ? Colors.red : Colors.grey,
           icon: Icons.delete,
-          onTap: () => deletePassanger(context, passanger),
+          onTap: () {
+            if (provider.isOnline) {
+              deletePassanger(context, passanger);
+            } else {
+              showDefaultSnackbar(context);
+            }
+          },
         ),
       ],
     );
@@ -68,7 +89,7 @@ class PassangerDetails extends StatelessWidget {
       child: ExpansionTile(
         title: ListTile(
           leading: CircleAvatar(
-            child: Text(passanger.id.toString()),
+            child: Text(passanger.name[0].toUpperCase()),
           ),
           title: Text(passanger.name),
         ),

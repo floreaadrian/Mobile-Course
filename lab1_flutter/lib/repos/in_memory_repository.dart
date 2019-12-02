@@ -4,11 +4,13 @@ import 'package:lab1_flutter/repos/repository.dart';
 class InMemoryRepository implements Repository {
   final List<Passanger> passangers = [
     Passanger(
-        id: 1,
-        name: "ce",
-        airplaneName: "clj->buc",
-        seatPosition: "c3",
-        email: "fds@fds.com")
+      id: 1,
+      name: "ce",
+      airplaneName: "clj->buc",
+      seatPosition: "c3",
+      email: "fds@fds.com",
+      serverId: "5de525ad221861a217f36c46",
+    )
   ];
   int biggestId = -1;
 
@@ -17,23 +19,25 @@ class InMemoryRepository implements Repository {
     biggestId = await findTheBiggestId();
     if (passanger.id == null || passanger.id == -1)
       passanger = Passanger(
-          id: biggestId + 1,
-          name: passanger.name,
-          airplaneName: passanger.airplaneName,
-          email: passanger.email,
-          seatPosition: passanger.seatPosition);
+        id: biggestId + 1,
+        name: passanger.name,
+        airplaneName: passanger.airplaneName,
+        email: passanger.email,
+        seatPosition: passanger.seatPosition,
+        serverId: passanger.serverId,
+      );
     passangers.add(passanger);
   }
 
   @override
-  Future<void> delete(Passanger passanger) async {
+  Future<void> deletePassanger(Passanger passanger) async {
     passangers.remove(passanger);
   }
 
   @override
   Future<void> update(Passanger oldPassanger, Passanger passanger) async {
     int poisition = passangers.lastIndexOf(oldPassanger);
-    await delete(passanger);
+    await deletePassanger(passanger);
     await addAtPosition(passanger, poisition);
   }
 
@@ -41,12 +45,12 @@ class InMemoryRepository implements Repository {
     passangers.insert(position, passanger);
   }
 
-  @override
-  Future<Passanger> findById(int id) async {
-    for (int i = 0; i < passangers.length; ++i)
-      if (passangers[i].id == id) return passangers[i];
-    return null;
-  }
+  // @override
+  // Future<Passanger> findById(int id) async {
+  //   for (int i = 0; i < passangers.length; ++i)
+  //     if (passangers[i].id == id) return passangers[i];
+  //   return null;
+  // }
 
   Future<int> findTheBiggestId() async {
     int biggest = -1;

@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lab1_flutter/commons/displayDialog.dart';
@@ -21,6 +22,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int biggestId = 0;
+
+  var subscription;
+
+  @override
+  void initState() {
+    final provider = Provider.of<CrudNotifier>(context, listen: false);
+    super.initState();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        provider.changeInternetStatus(false);
+      } else {
+        provider.changeInternetStatus(true);
+      }
+    });
+  }
 
   void addPassanger(BuildContext context, Map<String, dynamic> inputData) {
     final provider = Provider.of<CrudNotifier>(context, listen: true);
@@ -78,5 +96,12 @@ class _MyHomePageState extends State<MyHomePage> {
             addPassanger(context, inputData);
           }),
     );
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+
+    subscription.cancel();
   }
 }

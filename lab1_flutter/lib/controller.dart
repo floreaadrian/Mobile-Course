@@ -6,16 +6,16 @@ class Controller {
 
   Controller({this.repository});
 
-  void add(Passanger passanger) {
-    repository.add(passanger);
+  Future<void> add(Passanger passanger) async {
+    return repository.add(passanger);
   }
 
-  void delete(Passanger passanger) {
-    repository.delete(passanger);
+  Future<void> delete(Passanger passanger) async {
+    return repository.deletePassanger(passanger);
   }
 
-  void update(Passanger oldPasanger, Passanger passanger) {
-    repository.update(oldPasanger, passanger);
+  Future<void> update(Passanger oldPasanger, Passanger passanger) async {
+    return repository.update(oldPasanger, passanger);
   }
 
   Future<List<Passanger>> getAll() async {
