@@ -1,5 +1,5 @@
 import 'package:lab1_flutter/passanger.dart';
-import 'package:lab1_flutter/repository.dart';
+import 'package:lab1_flutter/repos/repository.dart';
 
 class InMemoryRepository implements Repository {
   final List<Passanger> passangers = [
@@ -26,15 +26,14 @@ class InMemoryRepository implements Repository {
   }
 
   @override
-  Future<void> delete(int id) async {
-    Passanger passanger = await findById(id);
+  Future<void> delete(Passanger passanger) async {
     passangers.remove(passanger);
   }
 
   @override
   Future<void> update(Passanger oldPassanger, Passanger passanger) async {
     int poisition = passangers.lastIndexOf(oldPassanger);
-    await delete(passanger.id);
+    await delete(passanger);
     await addAtPosition(passanger, poisition);
   }
 

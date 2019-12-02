@@ -1,5 +1,5 @@
 import 'package:lab1_flutter/passanger.dart';
-import 'package:lab1_flutter/repository.dart';
+import 'package:lab1_flutter/repos/repository.dart';
 
 class Controller {
   final Repository repository;
@@ -11,7 +11,7 @@ class Controller {
   }
 
   void delete(Passanger passanger) {
-    repository.delete(passanger.id);
+    repository.delete(passanger);
   }
 
   void update(Passanger oldPasanger, Passanger passanger) {

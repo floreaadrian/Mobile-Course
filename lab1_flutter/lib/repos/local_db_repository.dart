@@ -1,6 +1,6 @@
 import 'package:lab1_flutter/database_creator.dart';
 import 'package:lab1_flutter/passanger.dart';
-import 'package:lab1_flutter/repository.dart';
+import 'package:lab1_flutter/repos/repository.dart';
 
 class LocalDbRepository implements Repository {
   Future<List<Passanger>> getAll() async {
@@ -36,9 +36,9 @@ class LocalDbRepository implements Repository {
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(Passanger passanger) async {
     final sql = ''' DELETE FROM ${DatabaseCreator.passangerTable}
-      WHERE ${DatabaseCreator.id} == $id
+      WHERE ${DatabaseCreator.id} == ${passanger.id}
     ''';
     final result = await db.rawDelete(sql);
     DatabaseCreator.databaseLog('Delete passanger', sql, null, result);
