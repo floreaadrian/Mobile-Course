@@ -13,6 +13,7 @@ class ServerRepository extends Repository {
   final List<Passanger> toPushWhenOnline = List();
   Map<String, String> headers = {"Content-type": "application/json"};
   final Repository localDb = LocalDbRepository();
+  bool canSendToServer = true;
 
   Future<bool> checkIfInternet() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -39,21 +40,28 @@ class ServerRepository extends Repository {
   }
 
   Future<void> addToTheServer() async {
-    for (Passanger passanger in toPushWhenOnline) {
-      await addPassangerToServer(passanger);
+    if (canSendToServer) {
+      canSendToServer = false;
+      for (Passanger passanger in toPushWhenOnline) {
+        await addPassangerToServer(passanger);
+      }
+      toPushWhenOnline.clear();
+      if (toPushWhenOnline.isEmpty) {
+        canSendToServer = true;
+      }
     }
-    toPushWhenOnline.clear();
     return null;
   }
 
   @override
-  Future<void> add(Passanger passanger) async {
+  Future<Passanger> add(Passanger passanger) async {
     bool internetIsAvalible = await checkIfInternet();
-    localDb.add(passanger);
-    toPushWhenOnline.add(passanger);
+    Passanger newOne = await localDb.add(passanger);
+    toPushWhenOnline.add(newOne);
     if (internetIsAvalible == true) {
       await addToTheServer();
     }
+    return newOne;
   }
 
   @override
@@ -61,6 +69,7 @@ class ServerRepository extends Repository {
     String urlToAcces = baseUrl + "/" + passanger.serverId;
     Response response = await delete(urlToAcces);
     if (response.statusCode == 200) {
+      localDb.deletePassanger(passanger);
       print("delete completed");
     } else {
       throw "Couldn't delete";

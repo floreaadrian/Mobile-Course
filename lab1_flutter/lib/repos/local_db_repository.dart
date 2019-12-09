@@ -15,7 +15,7 @@ class LocalDbRepository implements Repository {
   }
 
   @override
-  Future<void> add(Passanger passanger) async {
+  Future<Passanger> add(Passanger passanger) async {
     final sql = '''INSERT INTO ${DatabaseCreator.passangerTable}
     (
       ${DatabaseCreator.name},
@@ -35,6 +35,20 @@ class LocalDbRepository implements Repository {
     ''';
     final result = await db.rawInsert(sql);
     DatabaseCreator.databaseLog('Add passanger', sql, null, result);
+    int lastId = await lastInsertedId();
+    Passanger newOne = Passanger(
+        airplaneName: passanger.airplaneName,
+        id: lastId,
+        seatPosition: passanger.seatPosition,
+        name: passanger.name,
+        email: passanger.email);
+    return newOne;
+  }
+
+  Future<int> lastInsertedId() async {
+    final sql = '''SELECT last_insert_rowid()''';
+    final result = await db.rawQuery(sql);
+    return result[0].values.elementAt(0);
   }
 
   @override

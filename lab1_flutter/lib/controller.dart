@@ -19,6 +19,8 @@ class Controller {
   }
 
   Future<List<Passanger>> getAll() async {
-    return repository.getAll();
+    List<Passanger> passangers = await repository.getAll();
+    passangers.forEach((f) => print(f.toJson()));
+    return passangers;
   }
 }

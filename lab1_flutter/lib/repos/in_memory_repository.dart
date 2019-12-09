@@ -15,7 +15,7 @@ class InMemoryRepository implements Repository {
   int biggestId = -1;
 
   @override
-  Future<void> add(Passanger passanger) async {
+  Future<Passanger> add(Passanger passanger) async {
     biggestId = await findTheBiggestId();
     if (passanger.id == null || passanger.id == -1)
       passanger = Passanger(
@@ -27,6 +27,7 @@ class InMemoryRepository implements Repository {
         serverId: passanger.serverId,
       );
     passangers.add(passanger);
+    return passanger;
   }
 
   @override
