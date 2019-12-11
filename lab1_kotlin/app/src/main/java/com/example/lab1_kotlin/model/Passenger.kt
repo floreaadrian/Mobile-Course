@@ -5,5 +5,6 @@ data class Passenger(
     var name: String,
     var email: String,
     var airplane: String,
-    var seatPosition: String
+    var seatPosition: String,
+    var serverId: String
 )

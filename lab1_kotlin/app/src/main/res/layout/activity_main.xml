@@ -6,8 +6,8 @@
     android:orientation="vertical"
     tools:context=".activities.MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/passengersRecyclerView"
+    <ListView
+        android:id="@+id/passengersLv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
