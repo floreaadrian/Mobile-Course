@@ -18,11 +18,13 @@ var lightTheme = ThemeData(
         title: TextStyle(
           color: Colors.black,
           fontFamily: 'Oswald',
+          decorationStyle: TextDecorationStyle.solid,
         ),
         body1: TextStyle(
           color: Colors.black,
           fontFamily: 'Oswald',
           fontSize: fontSizeBody,
+          decorationStyle: TextDecorationStyle.solid,
         )),
     iconTheme: IconThemeData(color: Colors.grey[700]));
 
@@ -42,10 +44,12 @@ var darkTheme = ThemeData(
         title: TextStyle(
           color: Colors.white,
           fontFamily: 'Oswald',
+          decorationStyle: TextDecorationStyle.solid,
         ),
         body1: TextStyle(
           color: Colors.white,
           fontFamily: 'Oswald',
           fontSize: fontSizeBody,
+          decorationStyle: TextDecorationStyle.solid,
         )),
     iconTheme: IconThemeData(color: Colors.white));

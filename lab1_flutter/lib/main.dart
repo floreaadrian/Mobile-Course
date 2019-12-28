@@ -11,6 +11,7 @@ import 'controller.dart';
 import 'database_creator.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await DatabaseCreator().initDatabase();
   Repository repository = new ServerRepository();
   Controller controller = new Controller(repository: repository);

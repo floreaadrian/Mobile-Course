@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lab1_flutter/commons/displayDialog.dart';
 import 'package:lab1_flutter/passanger.dart';
 import 'package:lab1_flutter/provider/crud_notifier.dart';
+import 'package:lab1_flutter/provider/theme_notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:random_color/random_color.dart';
 
 class PassangerWidget extends StatelessWidget {
   final Passanger passanger;
@@ -79,19 +83,53 @@ class PassangerWidget extends StatelessWidget {
   }
 }
 
-class PassangerDetails extends StatelessWidget {
+class PassangerDetails extends StatefulWidget {
   final Passanger passanger;
   const PassangerDetails({Key key, @required this.passanger}) : super(key: key);
 
   @override
+  _PassangerDetailsState createState() => _PassangerDetailsState();
+}
+
+class _PassangerDetailsState extends State<PassangerDetails> {
+  RandomColor _randomColor = RandomColor();
+  Color activeColor;
+
+  static const oneSec = const Duration(seconds: 3);
+  Timer timer;
+
+  void changeColor(Timer t) {
+    final provider = Provider.of<ThemeNotifier>(context, listen: false);
+    ColorBrightness colorBrightnessActive = provider.darkThemeEnabled
+        ? ColorBrightness.dark
+        : ColorBrightness.light;
+    Color newOne =
+        _randomColor.randomColor(colorBrightness: colorBrightnessActive);
+    setState(() {
+      activeColor = newOne;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      activeColor = _randomColor.randomColor(colorHue: ColorHue.random);
+    });
+    timer = new Timer.periodic(oneSec, changeColor);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      color: activeColor,
+      duration: Duration(seconds: 1),
       child: ExpansionTile(
         title: ListTile(
           leading: CircleAvatar(
-            child: Text(passanger.name[0].toUpperCase()),
+            child: Text(widget.passanger.name[0].toUpperCase()),
           ),
-          title: Text(passanger.name),
+          title: Text(widget.passanger.name),
         ),
         children: <Widget>[
           Padding(
@@ -101,18 +139,21 @@ class PassangerDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Row(
-                  children: <Widget>[Text("Email: "), Text(passanger.email)],
+                  children: <Widget>[
+                    Text("Email: "),
+                    Text(widget.passanger.email)
+                  ],
                 ),
                 Row(
                   children: <Widget>[
                     Text("Airplane Name: "),
-                    Text(passanger.airplaneName)
+                    Text(widget.passanger.airplaneName)
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     Text("Seat Position: "),
-                    Text(passanger.seatPosition)
+                    Text(widget.passanger.seatPosition)
                   ],
                 ),
               ],
@@ -121,5 +162,11 @@ class PassangerDetails extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 }
