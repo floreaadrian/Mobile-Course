@@ -6,8 +6,9 @@ class ThemeNotifier extends ChangeNotifier {
 
   bool get darkThemeEnabled => _darkThemeEnabled;
 
-  Future<void> changeTheme() async {
-    _darkThemeEnabled = !_darkThemeEnabled;
+  Future<void> changeTheme(bool darkTheme) async {
+    // _darkThemeEnabled = !_darkThemeEnabled;
+    _darkThemeEnabled = darkTheme;
     notifyListeners();
   }
 }

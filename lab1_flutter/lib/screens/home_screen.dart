@@ -77,14 +77,50 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(widget.darkThemeEnabled
-                ? Icons.wb_sunny
-                : FontAwesomeIcons.moon),
-            onPressed: themeProvider.changeTheme,
-          ),
-        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Center(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Icon(Icons.wb_sunny),
+                  Text('Change the theme'),
+                  Icon(FontAwesomeIcons.moon),
+                ],
+              )),
+              decoration: BoxDecoration(
+                color: Colors.green,
+              ),
+            ),
+            ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Icon(Icons.wb_sunny),
+                  Text('Light theme'),
+                  Icon(Icons.wb_sunny),
+                ],
+              ),
+              onTap: () => themeProvider.changeTheme(false),
+            ),
+            ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Icon(FontAwesomeIcons.moon),
+                  Text('Dark theme'),
+                  Icon(FontAwesomeIcons.moon),
+                ],
+              ),
+              onTap: () => themeProvider.changeTheme(true),
+            ),
+          ],
+        ),
       ),
       body: Container(child: passangersWidget()),
       floatingActionButton: FloatingActionButton(
