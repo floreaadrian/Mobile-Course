@@ -81,6 +81,7 @@ class ServerRepository extends Repository {
     bool internetIsAvalible = await checkIfInternet();
     if (internetIsAvalible) {
       await addToTheServer();
+      List<Passanger> passangers = await localDb.getAll();
       Response res = await get(baseUrl);
       if (res.statusCode == 200) {
         List<dynamic> body = jsonDecode(res.body);
@@ -89,6 +90,14 @@ class ServerRepository extends Repository {
               (dynamic item) => Passanger.fromJson(item),
             )
             .toList();
+        if (passangers.length != posts.length) {
+          for (Passanger passanger in passangers) {
+            await localDb.deletePassanger(passanger);
+          }
+          for (Passanger passanger in posts) {
+            await localDb.add(passanger);
+          }
+        }
         return posts;
       } else {
         throw "Can't get passanger.";

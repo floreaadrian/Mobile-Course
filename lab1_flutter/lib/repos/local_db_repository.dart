@@ -3,6 +3,8 @@ import 'package:lab1_flutter/passanger.dart';
 import 'package:lab1_flutter/repos/repository.dart';
 
 class LocalDbRepository implements Repository {
+  int idStatus = 4000;
+
   Future<List<Passanger>> getAll() async {
     final sql = '''SELECT * FROM ${DatabaseCreator.passangerTable}''';
     final data = await db.rawQuery(sql);
@@ -16,8 +18,10 @@ class LocalDbRepository implements Repository {
 
   @override
   Future<Passanger> add(Passanger passanger) async {
+    int idToInsert = await lastInsertedId() + 400;
     final sql = '''INSERT INTO ${DatabaseCreator.passangerTable}
     (
+      ${DatabaseCreator.id},
       ${DatabaseCreator.name},
       ${DatabaseCreator.seatPosition},
       ${DatabaseCreator.airplaneName},
@@ -26,6 +30,7 @@ class LocalDbRepository implements Repository {
     )
     VALUES
     (
+      $idToInsert,
       "${passanger.name}",
       "${passanger.seatPosition}",
       "${passanger.airplaneName}",
@@ -35,10 +40,10 @@ class LocalDbRepository implements Repository {
     ''';
     final result = await db.rawInsert(sql);
     DatabaseCreator.databaseLog('Add passanger', sql, null, result);
-    int lastId = await lastInsertedId();
+    // int lastId = await lastInsertedId();
     Passanger newOne = Passanger(
         airplaneName: passanger.airplaneName,
-        id: lastId,
+        id: idToInsert,
         seatPosition: passanger.seatPosition,
         name: passanger.name,
         email: passanger.email);
